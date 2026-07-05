@@ -1,0 +1,42 @@
+[
+  {
+    "label": "1.5B",
+    "n_correct": 104,
+    "cells": {
+      "number": {
+        "n": 104,
+        "retention": 0.8461538461538461,
+        "drop": 0.15384615384615385
+      },
+      "text": {
+        "n": 104,
+        "retention": 0.8653846153846154,
+        "drop": 0.13461538461538458
+      }
+    },
+    "incorporates_frac": 0.0625,
+    "number_worse": 11,
+    "text_worse": 9,
+    "mcnemar_number_vs_text": 0.8238029479980469
+  },
+  {
+    "label": "0.5B",
+    "n_correct": 39,
+    "cells": {
+      "number": {
+        "n": 39,
+        "retention": 0.46153846153846156,
+        "drop": 0.5384615384615384
+      },
+      "text": {
+        "n": 39,
+        "retention": 0.5641025641025641,
+        "drop": 0.4358974358974359
+      }
+    },
+    "incorporates_frac": 0.23809523809523808,
+    "number_worse": 9,
+    "text_worse": 5,
+    "mcnemar_number_vs_text": 0.4239501953125
+  }
+]

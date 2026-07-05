@@ -1,0 +1,51 @@
+# Every claim distractor makes, each tied to the artifact that proves it.
+# Verify integrity with ./scripts/gate.sh; reproduce with ./reproduce.sh.
+
+[project]
+name = "distractor"
+summary = "How much an irrelevant sentence knocks a model off a GSM8K problem, whether it is the stray number or general content that distracts, and how distractibility scales with model size."
+language = "Python 3"
+license = "MIT"
+oracles = "exact last-integer match against the GSM8K gold answer. Greedy, temperature 0. No judge."
+
+[[claim]]
+id = "pre-registered-prediction"
+statement = "The three-part prediction was written into the README before the full run. Parts 1 (irrelevant sentence lowers accuracy) and 3 (1.5B robust, 0.5B weaker) held. Part 2 (a number distractor hurts more than a text one) was FALSIFIED - the control refuted it - and is reported as the finding rather than hidden."
+evidence = "README pre-registered prediction; bench_results/frontier.md."
+status = "verified"
+
+[[claim]]
+id = "irrelevant-text-distracts"
+statement = "One irrelevant sentence lowers GSM8K accuracy on initially-correct items: the 1.5B drops 0.154 and the 0.5B drops 0.538 under the number distractor (0.135 and 0.436 under the text control)."
+evidence = "bench_results/frontier.md; tools/verify.py recomputes the drops from raw JSONL and asserts a real drop on both models."
+status = "verified"
+
+[[claim]]
+id = "not-the-stray-number"
+statement = "A number-bearing distractor is not significantly worse than a text-only one on either model (paired McNemar p=0.82 on the 1.5B, p=0.42 on the 0.5B), so the stray number is not the driver - general irrelevant content is."
+evidence = "bench_results/frontier.md number-vs-text comparison; tools/verify.py recomputes the paired McNemar and asserts no significant number-specific effect."
+status = "verified"
+
+[[claim]]
+id = "number-rarely-pulled-in"
+statement = "The stray number is rarely incorporated: only 6.2% of the 1.5B's number-distractor failures contain the distractor number (23.8% for the 0.5B, on a small count), so even the weaker model mostly fails by losing the thread, not by using the wrong number."
+evidence = "bench_results/frontier.md number-incorporation fraction."
+status = "verified"
+
+[[claim]]
+id = "distractibility-scales-with-capability"
+statement = "Distractibility tracks model strength: the same single sentence costs the 1.5B about 15% of its correct answers and the 0.5B about half (a three-to-four-fold difference), so a small model's headline accuracy overstates how well it holds up on padded inputs."
+evidence = "bench_results/frontier.md drops; tools/verify.py asserts the 0.5B drop exceeds twice the 1.5B drop."
+status = "verified"
+
+[[claim]]
+id = "no-overclaim"
+statement = "Two sizes, one benchmark, a small fixed distractor pool at one position, greedy. Retention is on initially-correct items; the 0.5B n is 39 and reported as directional. Not a claim about larger models or adversarial distractors. The adversarial review is in REVIEW.md."
+evidence = "README limitations + falsifiers; REVIEW.md."
+status = "verified"
+
+[[claim]]
+id = "clean-build"
+statement = "ruff-clean, mypy --strict clean, 7 pytest tests pass, sources are pure ASCII, the independent verify passes, and no private operating-environment details are present."
+evidence = "scripts/gate.sh."
+status = "verified"
